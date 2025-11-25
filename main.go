@@ -21,9 +21,11 @@ func main() {
 	if selectedDay != 0 {
 		runDay(selectedDay)
 	} else {
+		start := time.Now()
 		for i := range days {
 			runDay(i)
 		}
+		fmt.Printf("Grand total time: %s\n", time.Since(start))
 	}
 }
 
