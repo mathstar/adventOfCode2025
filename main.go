@@ -1,16 +1,47 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"time"
 )
 
+var selectedDay int
+
+func init() {
+	flag.IntVar(&selectedDay, "day", 0, "Day to run")
+	flag.IntVar(&selectedDay, "d", 0, "Day to run")
+}
+
 func main() {
-	getInput(1)
-	fmt.Println(days[1].part1(getInput(1)))
-	fmt.Println(days[1].part2(getInput(1)))
+	flag.Parse()
+	if selectedDay != 0 {
+		runDay(selectedDay)
+	} else {
+		for i := range days {
+			runDay(i)
+		}
+	}
+}
+
+func runDay(day int) {
+	dayImpl, ok := days[day]
+	if !ok {
+		panic(fmt.Sprintf("Day %02d not registered", day))
+	}
+
+	fmt.Printf("Running day %02d\n", day)
+	input := getInput(day)
+	start := time.Now()
+	fmt.Println(dayImpl.part1(input))
+	part1Time := time.Since(start)
+	start = time.Now()
+	fmt.Println(dayImpl.part2(input))
+	part2Time := time.Since(start)
+	fmt.Printf("Timing: part1 %s, part2 %s, total %s\n", part1Time, part2Time, part1Time+part2Time)
 }
 
 type day interface {
