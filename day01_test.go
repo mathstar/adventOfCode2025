@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func TestPart1(t *testing.T) {
+func TestDay1Part1(t *testing.T) {
 	input := `L68
 L30
 R48
@@ -20,7 +20,7 @@ L82`
 	}
 }
 
-func TestPart2(t *testing.T) {
+func TestDay1Part2(t *testing.T) {
 	input := `L68
 L30
 R48
