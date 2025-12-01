@@ -44,8 +44,7 @@ func (_ day1) part2(input string) string {
 			panic(err)
 		}
 
-		multiplier := 1
-		distToZero := 0
+		var multiplier, distToZero int
 		switch l[0] {
 		case 'L':
 			multiplier = -1
