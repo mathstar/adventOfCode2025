@@ -73,7 +73,7 @@ func getInput(day int) string {
 	// Fetch input from Advent of Code
 	userAgent := "https://github.com/mathstar/adventOfCode2025 by mstaricka@gmail.com"
 	cookie := "session=" + os.Getenv("SESSION")
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://adventofcode.com/2024/day/%d/input", day), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("https://adventofcode.com/2025/day/%d/input", day), nil)
 	req.Header.Set("User-Agent", userAgent)
 	req.Header.Set("Cookie", cookie)
 
