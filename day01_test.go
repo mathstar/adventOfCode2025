@@ -14,10 +14,7 @@ L99
 R14
 L82`
 	want := "3"
-	got := day1{}.part1(input)
-	if got != want {
-		t.Errorf("part1() = %q, want %q", got, want)
-	}
+	assertPart1(day1{}, input, want, t)
 }
 
 func TestDay1Part2(t *testing.T) {
@@ -32,8 +29,5 @@ L99
 R14
 L82`
 	want := "6"
-	got := day1{}.part2(input)
-	if got != want {
-		t.Errorf("part2() = %q, want %q", got, want)
-	}
+	assertPart2(day1{}, input, want, t)
 }
