@@ -12,25 +12,19 @@ func init() {
 }
 
 func (_ day2) part1(input string) string {
-	ranges := strings.Split(strings.TrimSpace(input), ",")
-	results := make([]chan int, len(ranges))
-	for i, r := range ranges {
-		results[i] = make(chan int)
-		go determineInvalidCount(r, checkValiditySimple, results[i])
-	}
-	var sum int
-	for _, r := range results {
-		sum += <-r
-	}
-	return strconv.Itoa(sum)
+	return sumValidity(input, checkValiditySimple)
 }
 
 func (_ day2) part2(input string) string {
+	return sumValidity(input, checkValidityComplex)
+}
+
+func sumValidity(input string, validityFunc func(int) bool) string {
 	ranges := strings.Split(strings.TrimSpace(input), ",")
 	results := make([]chan int, len(ranges))
 	for i, r := range ranges {
 		results[i] = make(chan int)
-		go determineInvalidCount(r, checkValidityComplex, results[i])
+		go determineInvalidCount(r, validityFunc, results[i])
 	}
 	var sum int
 	for _, r := range results {
