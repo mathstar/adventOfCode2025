@@ -53,5 +53,53 @@ func invalidSum(startInc, endInc int) int64 {
 }
 
 func (_ day2) part2(input string) string {
-	return ""
+	ranges := strings.Split(strings.TrimSpace(input), ",")
+	results := make([]chan int64, len(ranges))
+	for i, r := range ranges {
+		results[i] = make(chan int64)
+		go determineInvalidCount2(r, results[i])
+	}
+	var sum int64
+	for _, r := range results {
+		sum += <-r
+	}
+	return strconv.FormatInt(sum, 10)
+}
+
+func determineInvalidCount2(r string, ch chan int64) {
+	split := strings.Split(r, "-")
+	startInc, err := strconv.Atoi(split[0])
+	if err != nil {
+		panic(err)
+	}
+	endInc, err := strconv.Atoi(split[1])
+	if err != nil {
+		panic(err)
+	}
+	ch <- invalidSum2(startInc, endInc)
+}
+
+func invalidSum2(startInc, endInc int) int64 {
+	var sum int64
+numberLoop:
+	for i := startInc; i <= endInc; i++ {
+		s := strconv.Itoa(i)
+	splitLengthLoop:
+		for splitLength := 1; splitLength <= len(s)/2; splitLength++ {
+			if len(s)%splitLength == 0 {
+				var splits []string
+				for j := 0; j < len(s); j += splitLength {
+					splits = append(splits, s[j:j+splitLength])
+				}
+				for j := 1; j < len(splits); j++ {
+					if splits[0] != splits[j] {
+						continue splitLengthLoop
+					}
+				}
+				sum += int64(i)
+				continue numberLoop
+			}
+		}
+	}
+	return sum
 }
