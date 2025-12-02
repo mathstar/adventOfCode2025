@@ -12,7 +12,7 @@ func init() {
 }
 
 func (_ day2) part1(input string) string {
-	ranges := strings.Split(input, ",")
+	ranges := strings.Split(strings.TrimSpace(input), ",")
 	results := make([]chan int64, len(ranges))
 	for i, r := range ranges {
 		results[i] = make(chan int64)
@@ -27,8 +27,14 @@ func (_ day2) part1(input string) string {
 
 func determineInvalidCount(r string, ch chan int64) {
 	split := strings.Split(r, "-")
-	startInc, _ := strconv.Atoi(split[0])
-	endInc, _ := strconv.Atoi(split[1])
+	startInc, err := strconv.Atoi(split[0])
+	if err != nil {
+		panic(err)
+	}
+	endInc, err := strconv.Atoi(split[1])
+	if err != nil {
+		panic(err)
+	}
 	ch <- invalidSum(startInc, endInc)
 }
 
