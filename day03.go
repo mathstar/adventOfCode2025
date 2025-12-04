@@ -58,101 +58,25 @@ func maximizeJoltage(bank []int) int {
 	return maxJoltage
 }
 
-//func maximizeLargeJoltage(bank []int) int {
-//	enabled := make([]bool, len(bank))
-//	placements := make([][]int, 10)
-//	for i := 0; i < 12; i++ {
-//		enabled[i] = true
-//		placements[bank[i]] = append(placements[bank[i]], i)
-//	}
-//
-//outer:
-//	for i := 12; i < len(bank); i++ {
-//		for v := 0; v <= bank[i]; v++ {
-//			if len(placements[v]) > 0 {
-//				j := placements[v][0]
-//
-//				enabled[i], enabled[j] = true, false
-//				placements[v] = placements[v][1:]
-//				placements[bank[i]] = append(placements[bank[i]], i)
-//				continue outer
-//			}
-//		}
-//	}
-//
-//	var total int
-//	for i := 0; i < len(bank); i++ {
-//		if enabled[i] {
-//			total *= 10
-//			total += bank[i]
-//		}
-//	}
-//	return total
-//}
-
-//func maximizeLargeJoltage(bank []int) int {
-//	digits := []int{bank[0], bank[1], bank[2], bank[3], bank[4], bank[5], bank[6], bank[7], bank[8], bank[9], bank[10], bank[11]}
-//
-//outer:
-//	for i := 12; i < len(bank); i++ {
-//		//fmt.Printf("%v\n", digits)
-//		nextDigit := bank[i]
-//		for j, digit := range digits {
-//			if j < len(digits)-1 && digit > digits[j+1] {
-//				continue
-//			}
-//			if nextDigit >= digit {
-//				//fmt.Printf("b[%v]=%v -> b[%v]=%v\n", j, digit, i, nextDigit)
-//				digits = append(digits[:j], digits[j+1:]...)
-//				digits = append(digits, nextDigit)
-//				continue outer
-//			}
-//		}
-//	}
-//	//fmt.Printf("%v\n", digits)
-//	//fmt.Println()
-//
-//	var total int
-//	for _, n := range digits {
-//		total *= 10
-//		total += n
-//	}
-//	return total
-//}
-
 func maximizeLargeJoltage(bank []int, ch chan int) {
-	memo := make(map[memoKey]int)
-	ch <- build(&memo, &bank, 0, 0, 0)
-}
-
-type memoKey struct {
-	value      int
-	digitCount int
-	i          int
-}
-
-func build(memo *map[memoKey]int, bank *[]int, value, digitCount, i int) int {
-	key := memoKey{value, digitCount, i}
-	if (*memo)[key] > 0 {
-		return (*memo)[key]
+	// start with first 12 digits
+	var value int
+	for i := 0; i < 12; i++ {
+		value *= 10
+		value += bank[i]
 	}
 
-	if i >= len(*bank) {
-		return value
+	for i := 12; i < len(bank); i++ {
+		// for each additional digit, find maximum value of either eliminating an existing digit in favor of the new digit
+		// or keeping current value
+		mask := 10
+		startingValue := value
+		for j := 0; j < 12; j++ {
+			valueWithDigitSwap := (startingValue%(mask/10)*10 + startingValue/mask*mask) + bank[i]
+			value = max(value, valueWithDigitSwap)
+			mask *= 10
+		}
 	}
 
-	if digitCount < 12 {
-		return build(memo, bank, value*10+(*bank)[i], digitCount+1, i+1)
-	}
-
-	mask := 10
-	nextValue := value
-	for j := 0; j < 12; j++ {
-		valueWithDigitSwap := (value%(mask/10)*10 + value/mask*mask) + (*bank)[i]
-		nextValue = max(nextValue, valueWithDigitSwap)
-		mask *= 10
-	}
-	m := build(memo, bank, nextValue, digitCount, i+1)
-	(*memo)[key] = m
-	return m
+	ch <- value
 }
