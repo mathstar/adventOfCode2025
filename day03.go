@@ -25,7 +25,7 @@ func (_ day3) part2(input string) string {
 	for i := range channels {
 		channels[i] = make(chan int)
 	}
-	for i, bank := range parseBatteries(input) {
+	for i, bank := range banks {
 		go maximizeLargeJoltage(bank, channels[i])
 	}
 
