@@ -145,13 +145,14 @@ func build(memo *map[memoKey]int, bank *[]int, value, digitCount, i int) int {
 		return build(memo, bank, value*10+(*bank)[i], digitCount+1, i+1)
 	}
 
-	m := build(memo, bank, value, digitCount, i+1)
 	mask := 10
+	nextValue := value
 	for j := 0; j < 12; j++ {
 		valueWithDigitSwap := (value%(mask/10)*10 + value/mask*mask) + (*bank)[i]
-		m = max(m, build(memo, bank, valueWithDigitSwap, digitCount, i+1))
+		nextValue = max(nextValue, valueWithDigitSwap)
 		mask *= 10
 	}
+	m := build(memo, bank, nextValue, digitCount, i+1)
 	(*memo)[key] = m
 	return m
 }
