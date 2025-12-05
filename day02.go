@@ -11,11 +11,11 @@ func init() {
 	registerDay(2, day2{})
 }
 
-func (_ day2) part1(input string) string {
+func (day2) part1(input string) string {
 	return sumValidity(input, checkValiditySimple)
 }
 
-func (_ day2) part2(input string) string {
+func (day2) part2(input string) string {
 	return sumValidity(input, checkValidityComplex)
 }
 

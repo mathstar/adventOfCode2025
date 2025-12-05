@@ -11,7 +11,7 @@ func init() {
 	registerDay(3, day3{})
 }
 
-func (_ day3) part1(input string) string {
+func (day3) part1(input string) string {
 	var totalJoltage int
 	for _, bank := range parseBatteries(input) {
 		totalJoltage += maximizeJoltage(bank)
@@ -19,7 +19,7 @@ func (_ day3) part1(input string) string {
 	return strconv.Itoa(totalJoltage)
 }
 
-func (_ day3) part2(input string) string {
+func (day3) part2(input string) string {
 	banks := parseBatteries(input)
 	channels := make([]chan int, len(banks))
 	for i := range channels {

@@ -12,7 +12,7 @@ func init() {
 	registerDay(1, day1{})
 }
 
-func (_ day1) part1(input string) string {
+func (day1) part1(input string) string {
 	zeroCount := 0
 	position := 50
 	for l := range strings.Lines(input) {
@@ -35,7 +35,7 @@ func (_ day1) part1(input string) string {
 	return fmt.Sprintf("%d", zeroCount)
 }
 
-func (_ day1) part2(input string) string {
+func (day1) part2(input string) string {
 	clickCount := 0
 	position := 50
 	for l := range strings.Lines(input) {

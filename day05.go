@@ -12,13 +12,13 @@ func init() {
 	registerDay(5, day5{})
 }
 
-func (_ day5) part1(input string) string {
+func (day5) part1(input string) string {
 	freshnessDb, ingredients := parseInput(input)
 	fresh := countFresh(freshnessDb, ingredients)
 	return strconv.Itoa(fresh)
 }
 
-func (_ day5) part2(input string) string {
+func (day5) part2(input string) string {
 	freshnessDb, _ := parseInput(input)
 	fresh := countAllFresh(freshnessDb)
 	return strconv.Itoa(fresh)

@@ -11,7 +11,7 @@ func init() {
 	registerDay(4, day4{})
 }
 
-func (_ day4) part1(input string) string {
+func (day4) part1(input string) string {
 	grid := parseGrid(input)
 
 	var movable int
@@ -26,7 +26,7 @@ func (_ day4) part1(input string) string {
 	return strconv.Itoa(movable)
 }
 
-func (_ day4) part2(input string) string {
+func (day4) part2(input string) string {
 	grid := parseGrid(input)
 
 	var movable int
