@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"slices"
 	"strconv"
 	"strings"
@@ -20,12 +19,14 @@ func (_ day5) part1(input string) string {
 }
 
 func (_ day5) part2(input string) string {
-	return ""
+	freshnessDb, _ := parseInput(input)
+	fresh := countAllFresh(freshnessDb)
+	return strconv.Itoa(fresh)
 }
 
 type freshnessEntry struct {
 	start int
-	fresh bool
+	end   int
 }
 
 func freshnessEntryCmp(a, b freshnessEntry) int {
@@ -66,14 +67,7 @@ func parseInput(input string) ([]freshnessEntry, []int) {
 				panic(err)
 			}
 
-			freshnessDb = append(freshnessDb, freshnessEntry{
-				start: start,
-				fresh: true,
-			})
-			freshnessDb = append(freshnessDb, freshnessEntry{
-				start: end + 1,
-				fresh: false,
-			})
+			freshnessDb = append(freshnessDb, freshnessEntry{start, end})
 		}
 	}
 	slices.Sort(ingredients)
@@ -84,31 +78,44 @@ func parseInput(input string) ([]freshnessEntry, []int) {
 
 func countFresh(freshnessDb []freshnessEntry, ingredients []int) int {
 	var count int
-	var inFresh bool
-	var nextEntry = 0
+	var searchStart int
 
 	for _, ingredient := range ingredients {
-		for ; nextEntry < len(freshnessDb) && ingredient >= freshnessDb[nextEntry].start; nextEntry++ {
-			inFresh = freshnessDb[nextEntry].fresh
+		for ; searchStart < len(freshnessDb) && ingredient > freshnessDb[searchStart].end; searchStart++ {
+		}
+		if searchStart >= len(freshnessDb) {
+			break
 		}
 
-		var start, end string
-		if nextEntry > 0 {
-			start = strconv.Itoa(freshnessDb[nextEntry-1].start)
-		} else {
-			start = "0"
+		var fresh bool
+		for i := searchStart; i < len(freshnessDb); i++ {
+			if ingredient >= freshnessDb[i].start && ingredient <= freshnessDb[i].end {
+				fresh = true
+				break
+			}
+			if ingredient < freshnessDb[i].start {
+				break
+			}
 		}
-		if nextEntry < len(freshnessDb) {
-			end = strconv.Itoa(freshnessDb[nextEntry].start)
-		} else {
-			end = "∞"
-		}
-		fmt.Printf("%v: %v - %d - %v\n", inFresh, start, ingredient, end)
-
-		if inFresh {
+		if fresh {
 			count++
 		}
 	}
 
+	return count
+}
+
+func countAllFresh(freshnessDb []freshnessEntry) int {
+	var count, p int
+	for _, entry := range freshnessDb {
+		if p > entry.end {
+			continue
+		}
+		start := max(entry.start, p)
+		end := entry.end
+
+		count += end - start + 1
+		p = end + 1
+	}
 	return count
 }
