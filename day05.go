@@ -87,17 +87,7 @@ func countFresh(freshnessDb []freshnessEntry, ingredients []int) int {
 			break
 		}
 
-		var fresh bool
-		for i := searchStart; i < len(freshnessDb); i++ {
-			if ingredient >= freshnessDb[i].start && ingredient <= freshnessDb[i].end {
-				fresh = true
-				break
-			}
-			if ingredient < freshnessDb[i].start {
-				break
-			}
-		}
-		if fresh {
+		if ingredient >= freshnessDb[searchStart].start && ingredient <= freshnessDb[searchStart].end {
 			count++
 		}
 	}
