@@ -32,19 +32,15 @@ func (_ day4) part2(input string) string {
 	var movable int
 	for removed := true; removed; {
 		removed = false
-		nextGrid := make([][]bool, len(grid))
 		for i := range grid {
-			nextGrid[i] = make([]bool, len(grid[i]))
 			for j := range grid[i] {
-				nextGrid[i][j] = grid[i][j]
 				if grid[i][j] && neighborCount(&grid, i, j) < 4 {
 					removed = true
 					movable++
-					nextGrid[i][j] = false
+					grid[i][j] = false
 				}
 			}
 		}
-		grid = nextGrid
 	}
 
 	return strconv.Itoa(movable)
