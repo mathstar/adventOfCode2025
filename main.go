@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"slices"
 	"time"
 )
 
@@ -21,8 +22,13 @@ func main() {
 	if selectedDay != 0 {
 		runDay(selectedDay)
 	} else {
-		start := time.Now()
+		var dayKeys []int
 		for i := range days {
+			dayKeys = append(dayKeys, i)
+		}
+		slices.Sort(dayKeys)
+		start := time.Now()
+		for _, i := range dayKeys {
 			runDay(i)
 		}
 		fmt.Printf("Grand total time: %s\n", time.Since(start))
