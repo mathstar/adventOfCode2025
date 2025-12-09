@@ -27,12 +27,14 @@ func (d day7) part2(input string) string {
 	var init bool
 	for _, line := range d.parseInput(input) {
 		if !init {
+			// for first row, just run stepBeam to find beam start location
 			beams, _ := d.stepBeam(line, []int{})
 			for _, beam := range beams {
 				timelines[beam]++
 			}
 			init = true
 		} else {
+			// for each timeline from previous step, step that beam and add timeline counts for resultant beams
 			stepTimelines := make(map[int]int)
 			for beam, count := range timelines {
 				steppedBeams, _ := d.stepBeam(line, []int{beam})
@@ -75,6 +77,7 @@ func (day7) stepBeam(line []rune, beams []int) ([]int, int) {
 	for _, i := range beams {
 		switch line[i] {
 		case '.':
+			// basically doing a set here, but taking advantage of the increasing nature of the beams to just check previous value
 			if len(nextBeams) == 0 || nextBeams[len(nextBeams)-1] != i {
 				nextBeams = append(nextBeams, i)
 			}
